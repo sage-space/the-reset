@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Reset — Tigoni</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#C9A84C;--gold-light:#E8D5A3;--black:#0A0A0A;--black-light:#141414;--white:#F5F2EC;--grey:#8A8A8A;--grey-dark:#4A4A4A;--transition:all 0.4s cubic-bezier(0.25,0.46,0.45,0.94)}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;font-weight:300;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:0.03;pointer-events:none;z-index:9999}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;padding:24px 48px;display:flex;justify-content:space-between;align-items:center;z-index:100;background:linear-gradient(to bottom,rgba(10,10,10,0.9),transparent);opacity:0;animation:fadeIn 1s ease forwards 0.5s}
+.nav-logo{font-family:‘Cormorant Garamond’,serif;font-size:14px;letter-spacing:3px;text-transform:uppercase;color:var(–gold);font-weight:400}
+.nav-links{display:flex;gap:40px}
+.nav-links a{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(–grey);text-decoration:none;transition:var(–transition)}
+.nav-links a:hover{color:var(–gold)}
+
+/* STICKY */
+.sticky-cta{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,10,0.95);backdrop-filter:blur(20px);border-top:1px solid rgba(201,168,76,0.15);padding:16px 48px;display:flex;justify-content:space-between;align-items:center;z-index:999;transform:translateY(100%);transition:transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94)}
+.sticky-cta.visible{transform:translateY(0)}
+.sticky-label{font-size:12px;color:var(–grey);letter-spacing:1px}
+.sticky-label strong{color:var(–white);font-weight:500}
+.sticky-btn{padding:12px 32px;background:var(–gold);color:var(–black);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:var(–transition)}
+.sticky-btn:hover{background:var(–gold-light)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:120px 32px 100px;position:relative;overflow:hidden}
+.hero::before{content:’’;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(201,168,76,0.08) 0%,transparent 70%);pointer-events:none}
+.eyebrow{font-size:10px;font-weight:500;letter-spacing:4px;color:var(–gold);text-transform:uppercase;margin-bottom:40px;opacity:0;animation:fadeUp 1s ease forwards 0.3s;display:flex;align-items:center;gap:16px}
+.eyebrow::before,.eyebrow::after{content:’’;width:40px;height:1px;background:rgba(201,168,76,0.3)}
+.hero-title{font-family:‘Cormorant Garamond’,serif;font-size:clamp(64px,15vw,140px);font-weight:300;line-height:0.9;letter-spacing:-2px;color:var(–white);opacity:0;animation:fadeUp 1.2s ease forwards 0.5s}
+.hero-title em{color:var(–gold);font-style:italic;display:block;font-weight:400}
+.hero-deck{font-family:‘Cormorant Garamond’,serif;font-size:clamp(18px,3vw,24px);font-weight:300;color:var(–white);margin-top:40px;margin-bottom:20px;max-width:580px;line-height:1.5;opacity:0;animation:fadeUp 1s ease forwards 0.7s}
+.hero-sub{font-size:14px;color:var(–grey);max-width:480px;line-height:1.8;opacity:0;animation:fadeUp 1s ease forwards 0.9s;margin-bottom:60px}
+.hero-meta{display:flex;align-items:center;gap:48px;margin-bottom:60px;opacity:0;animation:fadeUp 1s ease forwards 1.1s}
+.meta-item{text-align:center}
+.meta-value{font-family:‘Cormorant Garamond’,serif;font-size:36px;font-weight:500;color:var(–gold);display:block;line-height:1;margin-bottom:8px}
+.meta-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(–grey);display:block}
+.meta-div{width:1px;height:50px;background:rgba(201,168,76,0.2)}
+.cta{display:inline-flex;align-items:center;gap:12px;padding:18px 40px;border:1px solid var(–gold);color:var(–gold);font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;text-decoration:none;background:transparent;cursor:pointer;transition:var(–transition);opacity:0;animation:fadeUp 1s ease forwards 1.3s;position:relative;overflow:hidden}
+.cta::before{content:’’;position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(–gold);transition:var(–transition);z-index:-1}
+.cta:hover{color:var(–black)}
+.cta:hover::before{left:0}
+.cta svg{width:16px;height:16px;transition:transform 0.3s ease}
+.cta:hover svg{transform:translateX(4px)}
+.cta-static{display:inline-flex;align-items:center;gap:12px;padding:18px 40px;border:1px solid var(–gold);color:var(–gold);font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;text-decoration:none;background:transparent;cursor:pointer;transition:var(–transition);position:relative;overflow:hidden}
+.cta-static::before{content:’’;position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(–gold);transition:var(–transition);z-index:-1}
+.cta-static:hover{color:var(–black)}
+.cta-static:hover::before{left:0}
+.scroll-indicator{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeIn 1s ease forwards 2s}
+.scroll-indicator span{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(–grey)}
+.scroll-line{width:1px;height:60px;background:linear-gradient(to bottom,var(–gold),transparent);animation:scrollPulse 2s ease-in-out infinite}
+.hero-identity{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(–gold);opacity:0;animation:fadeUp 1s ease forwards 1s;margin-top:-40px;margin-bottom:40px}
+
+/* NOVELTY BREAK — the pattern interrupt */
+.pattern-break{background:var(–black-light);border-top:1px solid rgba(201,168,76,0.1);border-bottom:1px solid rgba(201,168,76,0.1);padding:80px 32px;text-align:center;position:relative;overflow:hidden}
+.pattern-break::before{content:’’;position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at center,rgba(201,168,76,0.04) 0%,transparent 70%);pointer-events:none}
+.pattern-break-number{font-family:‘Cormorant Garamond’,serif;font-size:clamp(80px,15vw,160px);font-weight:300;color:rgba(201,168,76,0.08);line-height:1;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;white-space:nowrap}
+.pattern-break-text{font-family:‘Cormorant Garamond’,serif;font-size:clamp(24px,4vw,40px);font-weight:300;color:var(–white);line-height:1.3;max-width:700px;margin:0 auto;position:relative;z-index:1}
+.pattern-break-text em{color:var(–gold);font-style:italic}
+
+/* SECTIONS */
+.section{max-width:720px;margin:0 auto;padding:120px 32px;position:relative}
+.section-label{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(–gold);margin-bottom:48px;display:flex;align-items:center;gap:20px;font-weight:500}
+.section-label::after{content:’’;flex:1;height:1px;background:linear-gradient(to right,rgba(201,168,76,0.3),transparent)}
+.statement{font-family:‘Cormorant Garamond’,serif;font-size:clamp(32px,5vw,48px);font-weight:300;line-height:1.2;color:var(–white);margin-bottom:32px;letter-spacing:-0.5px}
+.statement em{color:var(–gold);font-style:italic}
+.body-text{font-size:16px;color:var(–grey);line-height:1.9;font-weight:300}
+.body-text p{margin-bottom:24px}
+.body-text strong{color:var(–white);font-weight:400}
+
+/* MECHANISM */
+.mechanism{border-left:2px solid var(–gold);padding:32px 36px;background:linear-gradient(90deg,rgba(201,168,76,0.05),transparent);margin:48px 0}
+.mechanism p{font-family:‘Cormorant Garamond’,serif;font-size:clamp(20px,3vw,24px);font-weight:300;color:var(–white);line-height:1.6;font-style:italic}
+
+/* FOUNDER TRANSMISSION */
+.founder-section{background:var(–black-light);padding:0}
+.founder-inner{max-width:720px;margin:0 auto;padding:120px 32px}
+.founder-transmission{border:1px solid rgba(201,168,76,0.15);padding:64px 56px;position:relative;overflow:hidden}
+.founder-transmission::before{content:’’;position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(–gold),transparent)}
+.transmission-label{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(–gold);margin-bottom:32px;font-weight:500;opacity:0.8}
+.transmission-title{font-family:‘Cormorant Garamond’,serif;font-size:clamp(28px,4vw,40px);font-weight:300;color:var(–white);margin-bottom:40px;line-height:1.2;letter-spacing:-0.5px}
+.transmission-body{font-size:15px;color:var(–grey);line-height:2;font-weight:300}
+.transmission-body p{margin-bottom:20px}
+.transmission-body strong{color:var(–white);font-weight:400}
+.transmission-body .beat{color:var(–white);font-family:‘Cormorant Garamond’,serif;font-size:18px;line-height:1.8;margin:12px 0}
+.transmission-body .em-dash{color:var(–gold);font-family:‘Cormorant Garamond’,serif;font-size:22px;font-style:italic}
+.transmission-signature{margin-top:48px;padding-top:32px;border-top:1px solid rgba(201,168,76,0.15);display:flex;align-items:center;gap:20px}
+.sig-avatar{width:48px;height:48px;border-radius:50%;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:center;font-family:‘Cormorant Garamond’,serif;font-size:18px;color:var(–gold);flex-shrink:0}
+.sig-text{font-family:‘Cormorant Garamond’,serif;font-size:16px;font-style:italic;color:var(–gold-light)}
+.sig-text span{display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(–grey);font-style:normal;margin-top:4px;font-family:‘Inter’,sans-serif}
+
+/* CHECKLIST */
+.check-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.check-list li{padding:24px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-family:‘Cormorant Garamond’,serif;font-size:clamp(18px,2.5vw,21px);font-weight:300;color:var(–white);line-height:1.6;display:flex;gap:20px;align-items:flex-start;transition:var(–transition)}
+.check-list li:hover{padding-left:8px;color:var(–gold-light)}
+.check-list li::before{content:’—’;color:var(–gold);flex-shrink:0;margin-top:2px;font-weight:400}
+.check-list li.hard-truth{color:var(–grey);font-style:italic;border-left:2px solid var(–gold);padding-left:24px;margin-top:16px;background:rgba(201,168,76,0.02)}
+.check-list li.hard-truth::before{content:none}
+
+/* MOVEMENTS */
+.movements{display:flex;flex-direction:column;gap:0}
+.movement{padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);display:grid;grid-template-columns:40px 1fr;gap:32px;align-items:start;transition:var(–transition)}
+.movement:hover{background:rgba(255,255,255,0.01);margin:0 -32px;padding:40px 32px}
+.movement-num{font-family:‘Cormorant Garamond’,serif;font-size:14px;color:var(–gold);font-weight:400;padding-top:4px;opacity:0.6}
+.movement-body h4{font-family:‘Cormorant Garamond’,serif;font-size:28px;font-weight:400;color:var(–white);margin-bottom:6px;letter-spacing:-0.5px}
+.movement-body .subtitle{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(–grey);margin-bottom:16px;display:block;font-weight:500}
+.movement-body p{font-size:15px;color:var(–grey);line-height:1.8}
+.tag{display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(–gold);border:1px solid rgba(201,168,76,0.3);padding:4px 12px;margin-bottom:16px;font-weight:500}
+
+/* TABLE */
+.table-section{background:var(–black-light);padding:48px;margin:40px 0;border:1px solid rgba(201,168,76,0.1)}
+.table-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.1)}
+.table-item{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(–gold);padding:20px;background:var(–black-light);line-height:1.5;font-weight:400;transition:var(–transition)}
+.table-item:hover{background:rgba(201,168,76,0.05)}
+
+/* LEAVE LIST */
+.leave-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.leave-list li{padding:24px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-family:‘Cormorant Garamond’,serif;font-size:clamp(18px,2.5vw,21px);color:var(–white);line-height:1.6;display:flex;gap:20px;align-items:flex-start;font-weight:300}
+.leave-list li::before{content:‘◆’;color:var(–gold);flex-shrink:0;font-size:10px;margin-top:6px}
+.leave-list li.gateway{border:1px solid rgba(201,168,76,0.2);padding:32px;margin-top:24px;background:linear-gradient(135deg,rgba(201,168,76,0.05),transparent);position:relative}
+.leave-list li.gateway::before{color:var(–gold-light)}
+.leave-list li.gateway::after{content:‘EXCLUSIVE ACCESS’;position:absolute;top:-10px;right:24px;background:var(–black);padding:0 12px;font-size:9px;letter-spacing:2px;color:var(–gold);font-family:‘Inter’,sans-serif;font-weight:500}
+.integration-note{margin-top:40px;border-left:2px solid var(–gold);padding:28px 32px;background:linear-gradient(90deg,rgba(201,168,76,0.05),transparent);position:relative}
+.integration-note::before{content:’”’;position:absolute;top:20px;left:20px;font-family:‘Cormorant Garamond’,serif;font-size:60px;color:var(–gold);opacity:0.2;line-height:1}
+.integration-note p{font-family:‘Cormorant Garamond’,serif;font-size:20px;font-style:italic;color:var(–white);line-height:1.7;position:relative;z-index:1}
+
+/* FACILITATOR */
+.facilitators{display:flex;flex-direction:column;gap:48px}
+.facilitator{padding:40px 0;border-bottom:1px solid rgba(255,255,255,0.06);display:grid;grid-template-columns:120px 1fr;gap:40px;align-items:start}
+.facilitator-avatar{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,rgba(201,168,76,0.2),rgba(201,168,76,0.05));border:1px solid rgba(201,168,76,0.2);display:flex;align-items:center;justify-content:center;font-family:‘Cormorant Garamond’,serif;font-size:48px;color:var(–gold);font-weight:300}
+.facilitator-content h4{font-family:‘Cormorant Garamond’,serif;font-size:32px;font-weight:400;color:var(–white);margin-bottom:6px}
+.facilitator .role{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(–gold);margin-bottom:20px;display:block;font-weight:500}
+.facilitator p{font-size:15px;color:var(–grey);line-height:1.9;margin-bottom:16px}
+
+/* LAND */
+.land-box{padding:56px;border:1px solid rgba(201,168,76,0.15);background:linear-gradient(135deg,rgba(201,168,76,0.03),transparent);position:relative;overflow:hidden}
+.land-box h4{font-family:‘Cormorant Garamond’,serif;font-size:36px;font-weight:300;color:var(–white);margin-bottom:24px}
+.land-box p{font-size:15px;color:var(–grey);line-height:1.9;margin-bottom:16px}
+
+/* PRICE */
+.price-section{background:var(–black-light);padding:80px 48px;border:1px solid rgba(201,168,76,0.15);text-align:center;position:relative;margin:40px 0}
+.price-section::before{content:‘◆’;position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(–black);padding:0 20px;color:var(–gold);font-size:14px}
+.price-amount{font-family:‘Cormorant Garamond’,serif;font-size:80px;font-weight:300;color:var(–gold);line-height:1;margin-bottom:8px;letter-spacing:-2px}
+.price-amount sup{font-size:28px;vertical-align:super;font-weight:400;margin-right:4px}
+.price-note{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(–grey);margin-bottom:12px;font-weight:500}
+.price-spots{font-family:‘Cormorant Garamond’,serif;font-size:22px;font-style:italic;color:var(–gold-light);margin-bottom:32px}
+.price-includes{font-size:13px;color:var(–grey);line-height:2.2;margin-bottom:40px;max-width:400px;margin-left:auto;margin-right:auto}
+.price-whisper{font-family:‘Cormorant Garamond’,serif;font-size:18px;font-style:italic;font-weight:300;color:var(–grey);margin-bottom:48px;line-height:1.7;max-width:500px;margin-left:auto;margin-right:auto;padding:32px;border-top:1px solid rgba(201,168,76,0.1);border-bottom:1px solid rgba(201,168,76,0.1)}
+
+/* PRE-COMMITMENT GATE */
+.precommit-gate{max-width:720px;margin:0 auto;padding:80px 32px;border-top:1px solid rgba(201,168,76,0.1)}
+.precommit-title{font-family:‘Cormorant Garamond’,serif;font-size:clamp(28px,4vw,40px);font-weight:300;color:var(–white);line-height:1.3;margin-bottom:16px}
+.precommit-sub{font-size:15px;color:var(–grey);line-height:1.8;margin-bottom:40px}
+.precommit-question{font-family:‘Cormorant Garamond’,serif;font-size:clamp(20px,3vw,26px);font-weight:300;color:var(–white);line-height:1.5;margin-bottom:40px;padding:32px;border:1px solid rgba(201,168,76,0.2);background:rgba(201,168,76,0.03);font-style:italic}
+.precommit-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.precommit-btn{padding:16px 40px;font-family:‘Inter’,sans-serif;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:var(–transition);border:1px solid}
+.precommit-btn.yes{background:var(–gold);color:var(–black);border-color:var(–gold)}
+.precommit-btn.yes:hover{background:var(–gold-light)}
+.precommit-btn.no{background:transparent;color:var(–grey);border-color:rgba(255,255,255,0.1)}
+.precommit-btn.no:hover{color:var(–white);border-color:rgba(255,255,255,0.3)}
+
+/* FORM */
+.form-section{max-width:720px;margin:0 auto;padding:80px 32px;display:none}
+.form-section.visible{display:block}
+.form-title{font-family:‘Cormorant Garamond’,serif;font-size:clamp(40px,6vw,56px);font-weight:300;color:var(–white);line-height:1.1;margin-bottom:20px;letter-spacing:-1px}
+.form-intro{font-size:15px;color:var(–grey);line-height:1.9;margin-bottom:48px;max-width:600px}
+.field{margin-bottom:24px}
+.field label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(–gold);margin-bottom:12px;font-weight:500}
+.field input,.field textarea{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);color:var(–white);font-family:‘Inter’,sans-serif;font-size:15px;font-weight:300;padding:20px;outline:none;transition:var(–transition);border-radius:0;-webkit-appearance:none}
+.field input::placeholder,.field textarea::placeholder{color:rgba(255,255,255,0.2);font-size:14px}
+.field input:focus,.field textarea:focus{border-color:var(–gold);background:rgba(201,168,76,0.02)}
+.field textarea{height:140px;resize:vertical;min-height:100px}
+.submit{width:100%;padding:22px;background:var(–gold);color:var(–black);border:none;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:var(–transition);margin-top:8px;display:flex;align-items:center;justify-content:center;gap:12px}
+.submit:hover{background:var(–gold-light);transform:translateY(-2px);box-shadow:0 10px 40px rgba(201,168,76,0.2)}
+.trust-note{font-size:12px;color:var(–grey-dark);text-align:center;margin-top:24px;line-height:1.7}
+.success{display:none;border:1px solid rgba(201,168,76,0.2);padding:64px 48px;text-align:center;background:linear-gradient(135deg,rgba(201,168,76,0.05),transparent)}
+.success-icon{width:64px;height:64px;border:1px solid var(–gold);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 32px;color:var(–gold);font-size:28px}
+.success h3{font-family:‘Cormorant Garamond’,serif;font-size:32px;font-weight:300;color:var(–gold);margin-bottom:20px}
+.success p{font-family:‘Cormorant Garamond’,serif;font-size:18px;font-style:italic;color:var(–grey);line-height:1.9;max-width:480px;margin:0 auto}
+
+/* NO RESPONSE */
+.no-response{display:none;padding:48px 32px;text-align:center;border:1px solid rgba(255,255,255,0.06)}
+.no-response p{font-family:‘Cormorant Garamond’,serif;font-size:20px;font-style:italic;color:var(–grey);line-height:1.8}
+.no-response a{color:var(–gold);text-decoration:none}
+
+/* FOOTER */
+footer{padding:60px 32px 120px;text-align:center;border-top:1px solid rgba(255,255,255,0.05);background:var(–black-light)}
+.footer-content{max-width:720px;margin:0 auto}
+.footer-logo{font-family:‘Cormorant Garamond’,serif;font-size:24px;color:var(–gold);margin-bottom:24px;font-weight:300;letter-spacing:2px}
+footer p{font-size:11px;letter-spacing:2px;color:var(–grey);text-transform:uppercase;line-height:2;margin-bottom:8px}
+footer span{color:var(–gold)}
+.footer-links{display:flex;justify-content:center;gap:32px;margin-top:32px;flex-wrap:wrap}
+.footer-links a{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(–grey);text-decoration:none;transition:var(–transition)}
+.footer-links a:hover{color:var(–gold)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.8s ease,transform 0.8s ease}
+.reveal.visible{opacity:1;transform:none}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scrollPulse{0%,100%{transform:scaleY(1);opacity:1}50%{transform:scaleY(0.5);opacity:0.5}}
+
+@media(max-width:768px){.nav{padding:20px 24px}.nav-links{display:none}.hero-meta{gap:32px}.sticky-cta{padding:16px 24px}.section{padding:80px 24px}.movement{grid-template-columns:30px 1fr;gap:20px}.facilitator{grid-template-columns:1fr;text-align:center}.facilitator-avatar{margin:0 auto}.founder-transmission{padding:40px 32px}.table-section{padding:32px}.land-box{padding:40px 32px}.price-section{padding:60px 32px}.founder-inner{padding:80px 24px}}
+@media(max-width:480px){.hero-title{font-size:clamp(48px,14vw,80px)}.price-amount{font-size:56px}.table-grid{grid-template-columns:1fr}.precommit-buttons{flex-direction:column}.precommit-btn{width:100%}}
+</style>
+
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">The Reset</div>
+  <div class="nav-links">
+    <a href="#transmission">The Letter</a>
+    <a href="#day">The Day</a>
+    <a href="#investment">Investment</a>
+    <a href="#gate">Apply</a>
+  </div>
+</nav>
+
+<div class="sticky-cta" id="sticky">
+  <div class="sticky-label"><strong>The Reset</strong> · April 26 · Tigoni · 12 spaces</div>
+  <a href="#gate" class="sticky-btn">Request Space</a>
+</div>
+
+<!-- HERO -->
+
+<section class="hero">
+  <p class="eyebrow">Tigoni, Kenya · April 26 · Twelve People Only</p>
+  <h1 class="hero-title">The<em>Reset</em></h1>
+  <p class="hero-deck">A one-day guided reset for founders, operators, and high-capacity professionals who are still performing — but know something underneath is no longer sustainable.</p>
+  <p class="hero-sub">Step out of the noise. Surface what is actually blocking you. Leave with a personal protocol for moving through it.</p>
+  <p class="hero-identity">This is for people others rely on — not people still figuring things out.</p>
+  <div class="hero-meta">
+    <div class="meta-item"><span class="meta-value">1</span><span class="meta-label">Day</span></div>
+    <div class="meta-div"></div>
+    <div class="meta-item"><span class="meta-value">12</span><span class="meta-label">Spaces</span></div>
+    <div class="meta-div"></div>
+    <div class="meta-item"><span class="meta-value">Apr 26</span><span class="meta-label">Tigoni</span></div>
+  </div>
+  <a href="#gate" class="cta">Request Your Space<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+  <div class="scroll-indicator"><span>Scroll</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- NOVELTY BREAK — pattern interrupt before the problem -->
+
+<div class="pattern-break reveal">
+  <div class="pattern-break-number">—</div>
+  <p class="pattern-break-text">The men who built the most serious civilisations on earth knew something modern high performers have quietly forgotten.<br><br><em>Achievement and renewal are not the same thing.</em></p>
+</div>
+
+<!-- FOUNDER TRANSMISSION -->
+
+<div class="founder-section" id="transmission">
+  <div class="founder-inner">
+    <div class="founder-transmission reveal">
+      <p class="transmission-label">Founder Transmission</p>
+      <h2 class="transmission-title">Before you request a seat, read this.</h2>
+      <div class="transmission-body">
+        <p>If you are reading this, there is a high chance you are already performing at a level most people would consider successful.</p>
+        <p>You carry responsibility. You make decisions that affect other people. You are used to solving problems by applying more effort, more thinking, more structure.</p>
+        <p>That approach works — until it doesn't.</p>
+        <p>At a certain level, the issue stops being effort.</p>
+        <p><strong>It becomes access.</strong></p>
+        <p class="beat">Access to clear thinking.</p>
+        <p class="beat">Access to your own signal.</p>
+        <p class="beat">Access to the part of you that knows what the right move is before the noise arrives.</p>
+        <p>Most people lose that access gradually. The pace of life accelerates. Information increases. Pressure accumulates. Eventually the internal signal gets buried under repetition, expectation, and mental residue.</p>
+        <p>From the outside, nothing looks wrong. But internally, the cost begins to rise.</p>
+        <p>Decisions take longer. Clarity comes and goes. You know you are capable of operating cleaner than this, but something keeps interfering.</p>
+        <p><strong>This experience exists for that exact moment.</strong></p>
+        <p>Not to motivate you. Not to fix you. To remove enough noise that you can finally see the pattern underneath the friction. Once the pattern is visible <span class="em-dash">—</span></p>
+        <p>The day in Tigoni is designed very carefully. The land slows you down. The environment restores attention. The audit reveals the pattern. The protocol gives you something you can apply immediately.</p>
+        <p>Twelve people only. Not because of exclusivity theater. Because honest work requires a room small enough that no one can hide.</p>
+        <p>If this resonates, request your space below. If it doesn't, this probably isn't the right environment for you — and that is perfectly fine.</p>
+      </div>
+      <div class="transmission-signature">
+        <div class="sig-avatar">SA</div>
+        <div class="sig-text">— Sage<span>Lead Facilitator · Intellisage Method</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- THE PROBLEM -->
+
+<section class="section" id="problem">
+  <p class="section-label reveal">The Problem</p>
+  <p class="statement reveal">You have built a life that looks functional.<br><em>So why does it still feel like something is off?</em></p>
+  <div class="body-text reveal">
+    <p>You are not broken. You are not lazy. You do not need another productivity hack.</p>
+    <p>You are capable — and your life already proves it. But somewhere beneath the performance, friction has built up.</p>
+    <p>Your thinking is noisier than it should be. Your attention keeps splitting. Decisions that should feel simple stay heavy for too long. Some days you are sharp, clean, and dangerous. Other days, you cannot seem to access the same mind.</p>
+    <p>That is the part most people miss. When the underlying pattern stays invisible, more effort does not solve it. More pressure does not solve it. More information does not solve it.</p>
+    <p><strong>The problem is not effort.</strong></p>
+  </div>
+  <p class="body-text reveal" style="color:var(--white);font-family:'Cormorant Garamond',serif;font-size:clamp(18px,3vw,24px);font-weight:300;font-style:italic;margin-bottom:32px">More input is not what got you here — and it won't get you out.</p>
+  <div class="mechanism reveal">
+    <p>The Reset is a guided one-day experience designed to remove noise, restore attention, surface the real source of your internal friction, and translate that insight into a practical personal protocol you can use immediately.</p>
+  </div>
+</section>
+
+<!-- FOR WHO -->
+
+<section class="section" style="padding-top:0">
+  <p class="section-label reveal">This Is For You If</p>
+  <ul class="check-list">
+    <li class="reveal">You are a founder, operator, creative, or high-capacity professional carrying more than most people realize.</li>
+    <li class="reveal">You are doing well by external standards — but privately, you know your inner world is not as clear as it should be.</li>
+    <li class="reveal">You overthink decisions you should already be able to make with confidence.</li>
+    <li class="reveal">You feel mentally on in flashes, but cannot access that level consistently.</li>
+    <li class="reveal">You have already tried discipline, systems, routines, and self-management. Something still is not clicking.</li>
+    <li class="reveal">You are not looking for more advice. You are looking for clarity, access, and traction.</li>
+    <li class="reveal">You can feel that there is another level of precision available to you — but something keeps interfering.</li>
+    <li class="reveal hard-truth">You are willing to be the least comfortable person in the room.</li>
+  </ul>
+  <div style="margin-top:40px;padding:32px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.01)" class="reveal">
+    <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:20px;font-weight:500">This is not for</p>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--grey);line-height:2;font-style:italic">Early-stage founders still finding product-market fit. Passive attendees looking for inspiration. Spectators. People who need to be convinced this matters.</p>
+  </div>
+</section>
+
+<!-- THE DAY -->
+
+<section class="section" style="padding-top:0" id="day">
+  <p class="section-label reveal">The Day</p>
+  <div class="body-text reveal" style="margin-bottom:48px">
+    <p>The day moves through four deliberate stages. Each stage is designed to lower noise, restore perception, expose the hidden pattern underneath your current friction, and convert insight into something operational.</p>
+    <p>No performance. No posturing. No need to arrive ready. You arrive as you are. The day does the work from there.</p>
+  </div>
+  <div class="movements">
+    <div class="movement reveal">
+      <div class="movement-num">I</div>
+      <div class="movement-body"><span class="tag">Arrival</span><h4>Downshifting</h4><p>The day begins by removing stimulation, pressure, and social performance. No forced networking. No awkward circle-talk. No need to explain yourself. You step onto the land, come out of urban momentum, and let your nervous system slow down enough to register where you actually are. Before clarity can return, pace has to change.</p></div>
+    </div>
+    <div class="movement reveal">
+      <div class="movement-num">II</div>
+      <div class="movement-body"><span class="tag">Re-sensitization</span><h4>Returning to Attention</h4><p>Guided colour meditation. Botanical scent work. Flower identification in the gardens. Sensory calibration through land, texture, scent, and stillness. These are not random wellness activities. They are deliberate tools for bringing perception back online. Most people are no longer looking at life clearly — they are looking through stress, repetition, speed, and mental residue. This stage helps you start noticing again.</p></div>
+    </div>
+    <div class="movement reveal">
+      <div class="movement-num">III</div>
+      <div class="movement-body"><span class="tag">Cognitive Audit</span><h4>Mapping the Pattern</h4><span class="subtitle">Structured Inquiry · Archetypal Mapping</span><p>Once attention returns, the real work begins. Through structured inquiry and archetypal mapping, we surface the specific pattern creating friction in your thinking, behaviour, or decision-making. This is not motivation. It is diagnosis. You begin to see what has been repeating beneath the surface — and why willpower alone has not resolved it.</p></div>
+    </div>
+    <div class="movement reveal">
+      <div class="movement-num">IV</div>
+      <div class="movement-body"><span class="tag">Translation</span><h4>The Day-0 Protocol</h4><p>Insight without translation changes nothing. By the end of the day, you leave with a personal protocol built around the specific pattern uncovered in your audit. Not generic advice. Not a motivational takeaway. A targeted, usable protocol for the problem you actually came with. Something you can use the next morning. Something built for your reality.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TABLE -->
+
+<section class="section" style="padding-top:0">
+  <p class="section-label reveal">The Table</p>
+  <div class="body-text reveal" style="margin-bottom:32px">
+    <p>A gourmet wellness lunch grown on the same land you are sitting on. Organic produce. Fresh herbs. Botanical preparations. Intentional nourishment. This is not a catering break. It is part of the experience. Everything on the table supports the wider aim of the day: reducing noise, restoring sensitivity, and helping your body and mind remember what clean input feels like.</p>
+  </div>
+  <div class="table-section reveal">
+    <div class="table-grid">
+      <div class="table-item">High-altitude botanical tea</div>
+      <div class="table-item">Mbirimbi sauce & fresh herbs</div>
+      <div class="table-item">Neural-priming tinctures</div>
+      <div class="table-item">Aromatherapy oils</div>
+      <div class="table-item">Sage and Sprouts blends</div>
+      <div class="table-item">Farm-fresh organic produce</div>
+      <div class="table-item">Botanical spice selection</div>
+      <div class="table-item">Artisanal fermentation</div>
+    </div>
+  </div>
+  <p class="body-text reveal" style="margin-top:32px;font-style:italic;color:var(--grey-dark)">Most people do not realize how overstimulated and undernourished they feel until contrast makes it obvious. That contrast is part of The Reset.</p>
+</section>
+
+<!-- LEAVE WITH -->
+
+<section class="section" style="padding-top:0">
+  <p class="section-label reveal">What You Leave With</p>
+  <ul class="leave-list">
+    <li class="reveal">A personal protocol built around the exact friction you are currently facing.</li>
+    <li class="reveal">Clear language for the cognitive pattern that has been interfering with your clarity, consistency, or movement.</li>
+    <li class="reveal">A practical method for returning to clear thinking when pressure rises.</li>
+    <li class="reveal">A two-week accountability follow-up — not a courtesy call. A gatekept check-in to hold your progress and prevent Monday morning regression.</li>
+    <li class="reveal gateway">Entry into The Waiting Room — the only door to the 2026 Kenya excursions and deeper programmes. The larger journeys are not advertised. The Reset is the prerequisite.</li>
+  </ul>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--white);line-height:1.7;margin-top:32px;padding:24px;border-left:2px solid var(--gold)" class="reveal">Two weeks from now, you will either still be in the same pattern — or you won't.</p>
+  <div class="integration-note reveal">
+    <p>The work is not complete when the day ends. The protocol is meant to be lived, tested, and reinforced. The follow-up exists to make sure what opened in Tigoni does not get swallowed by Monday.</p>
+  </div>
+</section>
+
+<!-- FACILITATOR -->
+
+<section class="section" style="padding-top:0">
+  <p class="section-label reveal">Your Facilitator</p>
+  <div class="facilitators">
+    <div class="facilitator reveal">
+      <div class="facilitator-avatar">SA</div>
+      <div class="facilitator-content">
+        <h4>Sage</h4>
+        <span class="role">Lead Facilitator · Intellisage Method</span>
+        <p>Facilitated across high-pressure environments where decisions carried real consequence and the cost of misreading a person was immediate. Over a decade of applied work in perceptual training, access-based learning, and human pattern recognition.</p>
+        <p>Out of that lived experience came the Intellisage Method: a framework for access-based learning, perceptual expansion, and pattern recognition developed across nearly a decade of study and application.</p>
+        <p>The Reset is built from that same core principle: most people do not need more force. They need better access. Every part of this day is designed to help participants recover access to what stress, speed, and noise have made harder to reach.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SETTING -->
+
+<section class="section" style="padding-top:0">
+  <p class="section-label reveal">The Setting</p>
+  <div class="land-box reveal">
+    <h4>Tigoni, Kenya.</h4>
+    <p>A private farm in the highlands outside Nairobi. The altitude is different. The air is different. The pace is different. That matters more than most people think.</p>
+    <p>The land is not there to make the day look beautiful. It is there to help interrupt the mental environment you have been living inside. The herbs, flowers, and produce used throughout the day are grown on the same farm.</p>
+    <p>You do not have to force yourself into a different state here. The environment helps do that for you.</p>
+    <p style="margin-top:16px;font-style:italic;color:var(--grey-dark)">Private highland estate. Not publicly accessible. Exact location shared upon acceptance. Transport guidance provided.</p>
+    <p style="margin-top:16px;font-style:italic;color:var(--grey-dark)">You do not need to believe in any of this. You only need to notice the result.</p>
+  </div>
+</section>
+
+<!-- INVESTMENT -->
+
+<section class="section" style="padding-top:0" id="investment">
+  <p class="section-label reveal">Investment</p>
+  <div class="price-section reveal">
+    <div class="price-amount"><sup>KSH</sup>11,011</div>
+    <p class="price-note">Per person · April 26 · Tigoni</p>
+    <p class="price-spots">Only 12 spaces available.</p>
+    <p style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:16px">9:00 AM — 6:00 PM · Full-day immersion</p>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--grey);margin-bottom:24px">Most spots are filled through referral. Applications close once alignment is reached — not at a fixed date.</p>
+    <p class="price-includes">Full guided day · Cognitive Audit & Archetypal Mapping<br>Gourmet organic farm lunch · Botanical experience<br>Personal Day-0 Protocol · Two-week accountability follow-up<br>Entry into The Waiting Room</p>
+    <p style="font-size:13px;color:var(--grey-dark);line-height:1.8;margin-bottom:24px;font-style:italic">If after the first segment you feel it is not for you, you are free to leave — no questions asked.</p>
+    <p class="price-whisper">"Most people spend more than this escaping for one night. This gives you something far rarer: clarity you can actually use."</p>
+    <a href="#gate" class="cta-static">Request Your Space</a>
+  </div>
+</section>
+
+<!-- PRE-COMMITMENT GATE -->
+
+<div class="precommit-gate reveal" id="gate">
+  <h2 class="precommit-title">One question before you apply.</h2>
+  <p class="precommit-sub">Answer honestly. Your answer determines what happens next.</p>
+  <p style="font-size:13px;color:var(--grey);text-align:center;margin-bottom:24px;letter-spacing:1px">If this is already clear to you, don't overthink it.</p>
+<p class="precommit-question">Do you believe you are currently operating below your actual capacity?</p>
+  <div class="precommit-buttons">
+    <button class="precommit-btn yes" onclick="openForm()">Yes — I know I have more</button>
+    <button class="precommit-btn no" onclick="showNo()">No — I am where I need to be</button>
+  </div>
+  <div class="no-response" id="no-response">
+    <p>Then this is not the right room for you — and that is perfectly fine.<br><br>If that changes, <a href="https://instagram.com/sageofatlantis">find us here.</a></p>
+  </div>
+</div>
+
+<!-- FORM — hidden until pre-commitment -->
+
+<div class="form-section" id="apply">
+  <p class="section-label">Application</p>
+  <h2 class="form-title">Request<br>your space.</h2>
+  <p class="form-intro">This is a small, deliberately curated group. Each request is reviewed personally so we can understand what you are carrying, what you need most from the day, and whether The Reset is the right environment for you. Because spaces are limited to 12, early applications are reviewed first.</p>
+  <div id="form-wrap">
+    <form onsubmit="handleSubmit(event)">
+      <div class="field"><label>Your Name</label><input type="text" name="name" placeholder="Full name" required></div>
+      <div class="field"><label>Email — for The Waiting Room</label><input type="email" name="email" placeholder="your@email.com" required></div>
+      <div class="field"><label>How to Reach You</label><input type="text" name="contact" placeholder="WhatsApp number or Instagram handle" required></div>
+      <div class="field"><label>What are you currently working through, carrying, or feeling stuck in?</label><textarea name="challenge" placeholder="Be as honest as you want. This goes directly to the facilitator only." required></textarea></div>
+      <div class="field"><label>What would need to shift for this day to feel truly worth it for you?</label><textarea name="success" placeholder="Be specific." required style="height:90px"></textarea></div>
+      <button type="submit" class="submit">Send Application via WhatsApp<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+      <p class="trust-note">Clicking opens WhatsApp with your application pre-filled. Send the message to complete your request. Direct line — no assistants, no forms lost in inboxes. Accepted applicants receive a private confirmation and preparation note. We respond within 24 hours.</p>
+    </form>
+  </div>
+  <div class="success" id="success-msg">
+    <div class="success-icon">✓</div>
+    <h3>Your request is ready.</h3>
+    <p>Your application has been prepared in WhatsApp. Send the message there to complete your request.<br><br>Your application will be reviewed personally. The Vizier will be in touch within 24 hours.<br><br>Welcome to The Waiting Room.</p>
+  </div>
+</div>
+
+<div style="text-align:center;padding:60px 32px;border-top:1px solid rgba(201,168,76,0.1)">
+  <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3vw,28px);font-style:italic;color:var(--white);line-height:1.6;max-width:600px;margin:0 auto">Everything else can wait.<br>This is the work that changes what happens next.</p>
+</div>
+<footer>
+  <div class="footer-content">
+    <div class="footer-logo">The Reset</div>
+    <p>Tigoni, Kenya</p>
+    <p>A <span>Sage</span> Experience</p>
+    <div class="footer-links">
+      <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to Top</a>
+      <a href="#gate">Apply</a>
+      <a href="https://instagram.com/sageofatlantis" target="_blank">Instagram</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Reveal
+const reveals=document.querySelectorAll('.reveal');
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}});},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
+reveals.forEach(el=>io.observe(el));
+
+// Sticky
+const sticky=document.getElementById('sticky');
+const heroObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(!e.isIntersecting){sticky.classList.add('visible')}else{sticky.classList.remove('visible')}});},{threshold:0.1});
+heroObs.observe(document.querySelector('.hero'));
+
+// Pre-commitment gate
+function openForm(){
+  document.getElementById('gate').style.display='none';
+  const form=document.getElementById('apply');
+  form.classList.add('visible');
+  setTimeout(()=>form.scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+
+function showNo(){
+  document.getElementById('no-response').style.display='block';
+  document.querySelector('.precommit-buttons').style.display='none';
+}
+
+// Form submit
+function handleSubmit(e){
+  e.preventDefault();
+  const f=e.target;
+  const msg='*The Reset — Application*\n\n*Name:* '+f.name.value+'\n*Email:* '+f.email.value+'\n*Contact:* '+f.contact.value+'\n\n*What I am working through:*\n'+f.challenge.value+'\n\n*What success looks like:*\n'+f.success.value;
+  window.open('https://wa.me/254100003456?text='+encodeURIComponent(msg),'_blank');
+  document.getElementById('form-wrap').style.display='none';
+  document.getElementById('success-msg').style.display='block';
+  document.getElementById('success-msg').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+  anchor.addEventListener('click',function(e){
+    const href=this.getAttribute('href');
+    if(href==='#')return;
+    e.preventDefault();
+    const target=document.querySelector(href);
+    if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+</script>
+
+</body>
+</html>
